@@ -14,12 +14,7 @@ func (t ConditionEQ) Evaluate() bool {
 		return false
 	}
 
-	if t.Action != nil {
-		if t.Action.Effect != nil {
-			t.Action.Effect()
-		}
-	}
-
+	t.ExecuteAction()
 	return true
 }
 

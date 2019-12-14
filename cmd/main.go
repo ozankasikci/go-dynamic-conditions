@@ -12,7 +12,6 @@ func main() {
 				RightOperand: 1,
 				Action: &gdc.Action{
 					Effect: func() {
-						println(1111)
 						res["test"] = "asdf"
 					},
 				},
@@ -25,6 +24,30 @@ func main() {
 				Action: &gdc.Action{
 					Effect: func() {
 						println(1)
+					},
+				},
+			},
+		},
+		gdc.And{
+			LeftCondition: gdc.ConditionEQ{
+				Condition: gdc.Condition{
+					LeftOperand:  false,
+					RightOperand: true,
+					Action: &gdc.Action{
+						Effect: func() {
+							println(1)
+						},
+					},
+				},
+			},
+			RightCondition: gdc.ConditionEQ{
+				Condition: gdc.Condition{
+					LeftOperand:  false,
+					RightOperand: true,
+					Action: &gdc.Action{
+						Effect: func() {
+							println(1)
+						},
 					},
 				},
 			},

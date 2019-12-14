@@ -14,12 +14,10 @@ type Condition struct {
 	Action *Action
 }
 
-type Action struct {
-	Value interface{}
-	Values []interface{}
-	Condition *Condition
-	Action *Action
-	Effect func()
+func (t Condition) ExecuteAction() {
+	if t.Action != nil {
+		t.Action.ExecuteEffect()
+	}
 }
 
 func isSameKind(leftOpVal, rightOpVal reflect.Value) bool {
