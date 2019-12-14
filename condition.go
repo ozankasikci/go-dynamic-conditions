@@ -15,7 +15,7 @@ const (
 )
 
 type Conditioner interface {
-	Evaluate()
+	Evaluate() bool
 }
 
 type Condition struct {
@@ -37,12 +37,12 @@ type ConditionEQ struct {
 	Condition
 }
 
-func (t ConditionGTE) Evaluate() {
+func (t ConditionGTE) Evaluate() bool {
 	leftOpVal := reflect.ValueOf(t.LeftOperand)
 	rightOpVal := reflect.ValueOf(t.RightOperand)
 
 	if !isGTE(leftOpVal, rightOpVal) {
-		return
+		return false
 	}
 
 	if t.Action != nil {
@@ -50,18 +50,34 @@ func (t ConditionGTE) Evaluate() {
 			t.Action.Effect()
 		}
 	}
+
+	return true
 }
 
 
-func (t ConditionLTE) Evaluate() {
+func (t ConditionLTE) Evaluate() bool {
+	leftOpVal := reflect.ValueOf(t.LeftOperand)
+	rightOpVal := reflect.ValueOf(t.RightOperand)
+
+	if !isGTE(leftOpVal, rightOpVal) {
+		return false
+	}
+
+	if t.Action != nil {
+		if t.Action.Effect != nil {
+			t.Action.Effect()
+		}
+	}
+
+	return true
 }
 
-func (t ConditionEQ) Evaluate() {
+func (t ConditionEQ) Evaluate() bool {
 	leftOpVal := reflect.ValueOf(t.LeftOperand)
 	rightOpVal := reflect.ValueOf(t.RightOperand)
 
 	if !isEqualVal(leftOpVal, rightOpVal) {
-		return
+		return false
 	}
 
 	if t.Action != nil {
@@ -69,6 +85,8 @@ func (t ConditionEQ) Evaluate() {
 			t.Action.Effect()
 		}
 	}
+
+	return true
 }
 
 type Action struct {
@@ -115,6 +133,23 @@ func isGTE(leftOpVal, rightOpVal reflect.Value) bool {
 	switch leftOpVal.Kind() {
 	case reflect.Int:
 		if !(leftOpVal.Int() >= rightOpVal.Int()) {
+			return false
+		}
+	default:
+		return false
+	}
+
+	return true
+}
+
+func isLTE(leftOpVal, rightOpVal reflect.Value) bool {
+	if !isSameKind(leftOpVal, rightOpVal)	{
+		return false
+	}
+
+	switch leftOpVal.Kind() {
+	case reflect.Int:
+		if !(leftOpVal.Int() <= rightOpVal.Int()) {
 			return false
 		}
 	default:
