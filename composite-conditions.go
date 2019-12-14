@@ -5,3 +5,6 @@ type And struct {
 	RightCondition Condition
 }
 
+func (t And) Evaluate()  {
+
+}
