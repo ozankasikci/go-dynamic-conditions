@@ -16,7 +16,7 @@ type Condition struct {
 
 func (t Condition) ExecuteAction() {
 	if t.Action != nil {
-		t.Action.ExecuteEffect()
+		t.Action.Execute()
 	}
 }
 
